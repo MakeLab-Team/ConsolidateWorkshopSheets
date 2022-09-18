@@ -24,6 +24,15 @@ field_renames = {
     'שולם': 'amountPaid'
 }
 
+field_required = {
+#    'workshop': True,
+    'name': True,
+    'city': False,
+    'participantNum': False,
+    'foundUsVia': False,
+    'amountPaid': False
+}
+
 default_vals = {
     'amountPaid': 0,
     'participantNum': 1,
@@ -31,13 +40,13 @@ default_vals = {
     'city': 'לא ידוע'
 }
 
-
+'''
 def list_sheets(filename: str):
     # List sheets in excel file
     xls = pd.ExcelFile(filename)
     sheet_dict = pd.read_excel(xls, sheet_name=None)
     return sheet_dict
-
+'''
 
 def read_excel(sheet):
     # Read Excel file
@@ -67,6 +76,11 @@ def resturcture_sheet(filename: str, workshop: str, sheet: pd.DataFrame):
             sheet.rename(columns={column_name: field_renames[column_name]}, inplace=True)
         else:
             sheet.drop(column_name, axis=1, inplace=True)
+    for field in field_required:
+        if field not in sheet.columns:
+            req_str = 'required' if field_required[field] else 'optional'
+            print(f'Missing {req_str} field {field} in {filename} - {workshop}')
+
     for field in default_vals.keys():
         if field not in sheet.columns:
             sheet[field] = default_vals[field]
