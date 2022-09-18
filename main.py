@@ -47,12 +47,6 @@ def list_sheets(filename: str):
     sheet_dict = pd.read_excel(xls, sheet_name=None)
     return sheet_dict
 
-def read_excel(sheet):
-    # Read Excel file
-    df = pd.read_excel('data.xlsx', sheet_name=sheet)
-    return df
-
-
 '''
 def consolidate(sheets):
     # Consolidate all sheets into one dataframe
