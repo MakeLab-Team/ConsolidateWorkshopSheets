@@ -40,13 +40,12 @@ default_vals = {
     'city': 'לא ידוע'
 }
 
-'''
+
 def list_sheets(filename: str):
     # List sheets in excel file
     xls = pd.ExcelFile(filename)
     sheet_dict = pd.read_excel(xls, sheet_name=None)
     return sheet_dict
-'''
 
 def read_excel(sheet):
     # Read Excel file
@@ -79,7 +78,8 @@ def resturcture_sheet(filename: str, workshop: str, sheet: pd.DataFrame):
     for field in field_required:
         if field not in sheet.columns:
             req_str = 'required' if field_required[field] else 'optional'
-            print(f'Missing {req_str} field {field} in {filename} - {workshop}')
+            level_str = 'ERROR' if field_required[field] else 'WARNING'
+            print(f'    {level_str}: Missing {req_str} field {field}')
 
     for field in default_vals.keys():
         if field not in sheet.columns:
@@ -103,8 +103,10 @@ def main():
         filename = file.name
         if os.path.basename(filename) == 'consolidated.xlsx':
             continue
+        print(f'Processing {filename}')
         sheet_dict = list_sheets(filename)
         for sheet_pair in sheet_dict.items():
+            print(f'  Processing sheet {sheet_pair[0]}')
             resturcture_sheet(file.stem, sheet_pair[0], sheet_pair[1])
 
         to_concat = list(sheet_dict.values())
